@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Media;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Timers;
 using Ical.Net;
@@ -20,6 +22,7 @@ namespace RememberCalendar
         private delegate void SafeCallDelegate(string text);
         List<Ical.Net.DataTypes.Occurrence> appointmentList = new List<Ical.Net.DataTypes.Occurrence>();
         string baseAddress = "https://outlook.office365.com/";
+        string projectUrl = "https://github.com/erlendthune/RememberCalendar";
 
         private void WriteTextSafe(string text)
         {
@@ -135,6 +138,53 @@ namespace RememberCalendar
         private void label5_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                VisitLink();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to open link that was clicked.");
+            }
+        }
+
+        private void VisitLink()
+        {
+            // Change the color of the link text by setting LinkVisited
+            // to true.
+            linkLabel1.LinkVisited = true;
+            //Call the Process.Start method to open the default browser
+            //with a URL:
+            string url = projectUrl;
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                // hack because of this: https://github.com/dotnet/corefx/issues/10361
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    url = url.Replace("&", "^&");
+                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    Process.Start("xdg-open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    Process.Start("open", url);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
     }
 }

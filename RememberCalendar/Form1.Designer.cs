@@ -39,6 +39,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.textBoxBaseURL = new System.Windows.Forms.TextBox();
             this.labelUpcomingAppointment = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // button1
@@ -63,7 +65,7 @@
             // 
             this.upcomingAppointmentTextBox.Location = new System.Drawing.Point(30, 164);
             this.upcomingAppointmentTextBox.Name = "upcomingAppointmentTextBox";
-            this.upcomingAppointmentTextBox.Size = new System.Drawing.Size(1077, 196);
+            this.upcomingAppointmentTextBox.Size = new System.Drawing.Size(386, 167);
             this.upcomingAppointmentTextBox.TabIndex = 3;
             this.upcomingAppointmentTextBox.Text = "";
             // 
@@ -136,11 +138,35 @@
             this.labelUpcomingAppointment.TabIndex = 11;
             this.labelUpcomingAppointment.Click += new System.EventHandler(this.label5_Click);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(593, 188);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(338, 80);
+            this.textBox1.TabIndex = 13;
+            this.textBox1.Text = "DISCLAIMER: Do not blame me if you miss an appointment. Instead you can log an is" +
+    "sue or make a pull request in the project on GitHUB.";
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(593, 311);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(355, 20);
+            this.linkLabel1.TabIndex = 14;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "https://github.com/erlendthune/RememberCalendar";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1191, 524);
+            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.labelUpcomingAppointment);
             this.Controls.Add(this.textBoxBaseURL);
             this.Controls.Add(this.label4);
@@ -173,5 +199,7 @@
         private Label label4;
         private TextBox textBoxBaseURL;
         private Label labelUpcomingAppointment;
+        private TextBox textBox1;
+        private LinkLabel linkLabel1;
     }
 }
