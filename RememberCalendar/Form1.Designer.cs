@@ -32,7 +32,7 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.upcomingAppointmentTextBox = new System.Windows.Forms.RichTextBox();
             this.button2 = new System.Windows.Forms.Button();
-            this.url = new System.Windows.Forms.TextBox();
+            this.textboxIcsUrl = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -79,21 +79,21 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // url
+            // textboxIcsUrl
             // 
-            this.url.Location = new System.Drawing.Point(118, 92);
-            this.url.Name = "url";
-            this.url.Size = new System.Drawing.Size(989, 27);
-            this.url.TabIndex = 5;
+            this.textboxIcsUrl.Location = new System.Drawing.Point(172, 92);
+            this.textboxIcsUrl.Name = "textboxIcsUrl";
+            this.textboxIcsUrl.Size = new System.Drawing.Size(935, 27);
+            this.textboxIcsUrl.TabIndex = 5;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(35, 91);
+            this.label1.Location = new System.Drawing.Point(30, 92);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 20);
+            this.label1.Size = new System.Drawing.Size(113, 20);
             this.label1.TabIndex = 6;
-            this.label1.Text = "URL";
+            this.label1.Text = "Ics Relative URL";
             // 
             // label2
             // 
@@ -116,7 +116,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(38, 57);
+            this.label4.Location = new System.Drawing.Point(30, 57);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(66, 20);
             this.label4.TabIndex = 9;
@@ -124,7 +124,7 @@
             // 
             // textBoxBaseURL
             // 
-            this.textBoxBaseURL.Location = new System.Drawing.Point(118, 57);
+            this.textBoxBaseURL.Location = new System.Drawing.Point(172, 57);
             this.textBoxBaseURL.Name = "textBoxBaseURL";
             this.textBoxBaseURL.Size = new System.Drawing.Size(346, 27);
             this.textBoxBaseURL.TabIndex = 10;
@@ -173,13 +173,14 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.url);
+            this.Controls.Add(this.textboxIcsUrl);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.upcomingAppointmentTextBox);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -192,7 +193,7 @@
         private RichTextBox richTextBox1;
         private RichTextBox upcomingAppointmentTextBox;
         private Button button2;
-        private TextBox url;
+        private TextBox textboxIcsUrl;
         private Label label1;
         private Label label2;
         private Label label3;
