@@ -15,21 +15,25 @@ using RestSharp;
 
 namespace RememberCalendar
 {
-    public partial class Form1 : Form
+    public partial class FormRememberCalendar : Form
     {
-        public Form1()
+        public FormRememberCalendar()
         {
             InitializeComponent();
         }
         private delegate void SafeCallDelegate(string text);
-        List<Ical.Net.DataTypes.Occurrence> appointmentList = new List<Ical.Net.DataTypes.Occurrence>();
+        List<AppointmentRememberCalendar> appointmentList = new List<AppointmentRememberCalendar>();
         string projectUrl = "https://github.com/erlendthune/RememberCalendar";
 
-        private void WriteTextSafe(string text)
+        /// <summary>
+        /// This method is neccessary to update text from the timer thread. 
+        /// </summary>
+        /// <param name="text"></param>
+        private void WriteUpcomingAppointmentStatusTextSafe(string text)
         {
             if (labelUpcomingAppointment.InvokeRequired)
             {
-                var d = new SafeCallDelegate(WriteTextSafe);
+                var d = new SafeCallDelegate(WriteUpcomingAppointmentStatusTextSafe);
                 labelUpcomingAppointment.Invoke(d, new object[] { text });
             }
             else
@@ -38,30 +42,57 @@ namespace RememberCalendar
                 labelUpcomingAppointment.BackColor = label1.BackColor == Color.Red ? Color.Green : Color.Red;
             }
         }
+        private void WriteUpcomingAppointmentSummaryTextSafe(string text)
+        {
+            if (labelUpcomingAppointmentSummary.InvokeRequired)
+            {
+                var d = new SafeCallDelegate(WriteUpcomingAppointmentSummaryTextSafe);
+                labelUpcomingAppointmentSummary.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                labelUpcomingAppointmentSummary.Text = text;
+                labelUpcomingAppointmentSummary.BackColor = label1.BackColor == Color.Red ? Color.Green : Color.Red;
+            }
+        }
+        private void WriteUpcomingAppintmentTimeSafe(string text)
+        {
+            if (labelUpcomingAppointmentSummary.InvokeRequired)
+            {
+                var d = new SafeCallDelegate(WriteUpcomingAppintmentTimeSafe);
+                labelUpcomingAppointmentSummary.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                labelUpcomingAppointmentSummary.Text = text;
+                labelUpcomingAppointmentSummary.BackColor = label1.BackColor == Color.Red ? Color.Green : Color.Red;
+            }
+        }
 
         // This is the method to run when the timer is raised.
         private void OnTimedEvent(Object myObject,
                                                 EventArgs myEventArgs)
         {
-            if(AppointmentComingUpSoon())
+            AppointmentRememberCalendar appointment = AppointmentComingUpSoon();
+            if (appointment != null)
             {
                 SystemSounds.Beep.Play();
-                WriteTextSafe("UPCOMING EVENT");
+                WriteUpcomingAppointmentStatusTextSafe("UPCOMING EVENT");
+                WriteUpcomingAppointmentSummaryTextSafe(appointment.Summary);
+
             }
         }
 
-        private bool AppointmentComingUpSoon()
+        private AppointmentRememberCalendar AppointmentComingUpSoon()
         {
             foreach (var appointment in appointmentList)
             {
-                var alertTime = appointment.Period.StartTime.AddMinutes(-15); 
-                if(DateTime.Now.Ticks > alertTime.Ticks)
+                if(appointment.AppointmentComingUpSoon(15))
                 {
-                    return true;
+                    return appointment;
                 }
-
             }
-            return false;
+            return null;
         }
 
         public void StartTimer()
@@ -84,7 +115,8 @@ namespace RememberCalendar
                     if (occ.Period.StartTime.Ticks > DateTime.Now.Ticks)
                     {
                         richTextBox1.Text += $"{item.Summary} is coming up: {appointmentDateTime}\n";
-                        appointmentList.Add(occ);
+                        AppointmentRememberCalendar appointment = new AppointmentRememberCalendar(item.Summary, occ.Period.StartTime);
+                        appointmentList.Add(appointment);
                     }
                     else
                     {
@@ -93,11 +125,11 @@ namespace RememberCalendar
                 }
             }
             upcomingAppointmentTextBox.Text = "";
-            appointmentList.Sort((a, b) => a.Period.StartTime.Ticks.CompareTo(b.Period.StartTime.Ticks));
-            foreach (var occ in appointmentList)
+            appointmentList.Sort((a, b) => a.When.Ticks.CompareTo(b.When.Ticks));
+            foreach (var appointment in appointmentList)
             {
-                var appointment = new DateTime(occ.Period.StartTime.Ticks);
-                upcomingAppointmentTextBox.Text += $"{appointment}\n";
+                var when = new DateTime(appointment.When.Ticks);
+                upcomingAppointmentTextBox.Text += $"{appointment.When} {appointment.Summary}\n";
             }
             StartTimer();
         }
@@ -200,6 +232,23 @@ namespace RememberCalendar
         {
             Properties.Settings.Default.icsRelativeURL = textboxIcsUrl.Text;
             Properties.Settings.Default.Save();
+        }
+
+        private void label5_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonDismiss_Click(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Dismiss button clicked.");
+
+        }
+
+        private void buttonSnooze_Click(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Snooze button clicked.");
+
         }
     }
 }
