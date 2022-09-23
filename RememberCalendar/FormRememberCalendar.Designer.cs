@@ -30,7 +30,6 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.upcomingAppointmentTextBox = new System.Windows.Forms.RichTextBox();
             this.button2 = new System.Windows.Forms.Button();
             this.textboxIcsUrl = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -48,6 +47,7 @@
             this.columnBaseAddress = new System.Windows.Forms.ColumnHeader();
             this.columnRelativeAddress = new System.Windows.Forms.ColumnHeader();
             this.buttonRemove = new System.Windows.Forms.Button();
+            this.upcomingAppointmentTextBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // button1
@@ -69,15 +69,6 @@
             this.richTextBox1.Size = new System.Drawing.Size(988, 80);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "";
-            // 
-            // upcomingAppointmentTextBox
-            // 
-            this.upcomingAppointmentTextBox.Location = new System.Drawing.Point(23, 404);
-            this.upcomingAppointmentTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.upcomingAppointmentTextBox.Name = "upcomingAppointmentTextBox";
-            this.upcomingAppointmentTextBox.Size = new System.Drawing.Size(986, 126);
-            this.upcomingAppointmentTextBox.TabIndex = 3;
-            this.upcomingAppointmentTextBox.Text = "";
             // 
             // button2
             // 
@@ -217,6 +208,7 @@
             this.listIcsAddresses.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnBaseAddress,
             this.columnRelativeAddress});
+            this.listIcsAddresses.FullRowSelect = true;
             this.listIcsAddresses.GridLines = true;
             this.listIcsAddresses.Location = new System.Drawing.Point(26, 116);
             this.listIcsAddresses.Name = "listIcsAddresses";
@@ -245,6 +237,15 @@
             this.buttonRemove.Text = "Remove";
             this.buttonRemove.UseVisualStyleBackColor = true;
             this.buttonRemove.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // upcomingAppointmentTextBox
+            // 
+            this.upcomingAppointmentTextBox.Location = new System.Drawing.Point(23, 404);
+            this.upcomingAppointmentTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.upcomingAppointmentTextBox.Name = "upcomingAppointmentTextBox";
+            this.upcomingAppointmentTextBox.Size = new System.Drawing.Size(986, 126);
+            this.upcomingAppointmentTextBox.TabIndex = 3;
+            this.upcomingAppointmentTextBox.Text = "";
             // 
             // FormRememberCalendar
             // 
@@ -283,7 +284,6 @@
 
         private Button button1;
         private RichTextBox richTextBox1;
-        private RichTextBox upcomingAppointmentTextBox;
         private Button button2;
         private TextBox textboxIcsUrl;
         private Label label1;
@@ -301,5 +301,6 @@
         private ColumnHeader columnBaseAddress;
         private ColumnHeader columnRelativeAddress;
         private Button buttonRemove;
+        private RichTextBox upcomingAppointmentTextBox;
     }
 }

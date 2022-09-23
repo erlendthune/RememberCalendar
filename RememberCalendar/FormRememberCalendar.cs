@@ -13,9 +13,11 @@ using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Timers;
+using System.Windows.Forms;
 using Ical.Net;
 using RememberCalendar.Properties;
 using RestSharp;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace RememberCalendar
 {
@@ -30,6 +32,8 @@ namespace RememberCalendar
         List<CalendarAddress> icsCalendarAddressList = new List<CalendarAddress>();
         string projectUrl = "https://github.com/erlendthune/RememberCalendar";
         System.Timers.Timer aTimer = new System.Timers.Timer();
+        bool dialogBoxOnDisplay = false;
+        List<AlertForm> alertFormList = new List<AlertForm>();
 
         /// <summary>
         /// This method is neccessary to update text from the timer thread. 
@@ -44,6 +48,19 @@ namespace RememberCalendar
             }
             else
             {
+                if(!dialogBoxOnDisplay)
+                {
+                    this.TopMost = true;
+                    var allScreens = System.Windows.Forms.Screen.AllScreens;
+                    foreach (var screen in allScreens)
+                    {
+                        AlertForm alertForm = new AlertForm(this, screen);
+                        alertFormList.Add(alertForm);
+                        alertForm.Show();
+                    }
+                    dialogBoxOnDisplay = true;
+                }
+
                 labelUpcomingAppointment.Text = text;
                 labelUpcomingAppointment.BackColor = label1.BackColor == Color.Red ? Color.Green : Color.Red;
             }
@@ -264,6 +281,16 @@ namespace RememberCalendar
             }
         }
 
+        public void AlertFormClosed(AlertForm alertForm)
+        {
+            alertFormList.Remove(alertForm);
+            debugOutput("AlertForm closed");
+            if(alertFormList.Count == 0)
+            {
+                dialogBoxOnDisplay = false;
+            }
+        }
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.Save();
@@ -287,7 +314,6 @@ namespace RememberCalendar
         private void buttonSnooze_Click(object sender, EventArgs e)
         {
             Debug.WriteLine("Snooze button clicked.");
-
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -333,7 +359,6 @@ namespace RememberCalendar
 
                 icsCalendarAddressList.Remove(icsCalendarAddressList[item.Index]);
                 listIcsAddresses.Items.Remove(item);
-
             }
         }
     }
