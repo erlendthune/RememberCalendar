@@ -36,8 +36,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBoxBaseURL = new System.Windows.Forms.TextBox();
             this.labelUpcomingAppointment = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
@@ -45,6 +43,11 @@
             this.labelUpcomingAppointmentSummary = new System.Windows.Forms.Label();
             this.labelUpcomingAppointmentTime = new System.Windows.Forms.Label();
             this.buttonSnooze = new System.Windows.Forms.Button();
+            this.buttonAddIcsUrl = new System.Windows.Forms.Button();
+            this.listIcsAddresses = new System.Windows.Forms.ListView();
+            this.columnBaseAddress = new System.Windows.Forms.ColumnHeader();
+            this.columnRelativeAddress = new System.Windows.Forms.ColumnHeader();
+            this.buttonRemove = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -60,7 +63,7 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(23, 435);
+            this.richTextBox1.Location = new System.Drawing.Point(21, 564);
             this.richTextBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(988, 80);
@@ -69,7 +72,7 @@
             // 
             // upcomingAppointmentTextBox
             // 
-            this.upcomingAppointmentTextBox.Location = new System.Drawing.Point(25, 275);
+            this.upcomingAppointmentTextBox.Location = new System.Drawing.Point(23, 404);
             this.upcomingAppointmentTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.upcomingAppointmentTextBox.Name = "upcomingAppointmentTextBox";
             this.upcomingAppointmentTextBox.Size = new System.Drawing.Size(986, 126);
@@ -92,7 +95,7 @@
             this.textboxIcsUrl.Location = new System.Drawing.Point(147, 70);
             this.textboxIcsUrl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textboxIcsUrl.Name = "textboxIcsUrl";
-            this.textboxIcsUrl.Size = new System.Drawing.Size(826, 23);
+            this.textboxIcsUrl.Size = new System.Drawing.Size(704, 23);
             this.textboxIcsUrl.TabIndex = 5;
             // 
             // label1
@@ -100,14 +103,15 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(23, 70);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(89, 15);
+            this.label1.Size = new System.Drawing.Size(65, 15);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Ics Relative URL";
+            this.label1.Text = "Ics full URL";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(25, 417);
+            this.label2.Location = new System.Drawing.Point(23, 546);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(81, 15);
             this.label2.TabIndex = 7;
@@ -116,34 +120,17 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(28, 255);
+            this.label3.Location = new System.Drawing.Point(26, 384);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(184, 15);
             this.label3.TabIndex = 8;
             this.label3.Text = "Appointments that will give alerts";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(23, 44);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(52, 15);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "BaseURL";
-            // 
-            // textBoxBaseURL
-            // 
-            this.textBoxBaseURL.Location = new System.Drawing.Point(147, 44);
-            this.textBoxBaseURL.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBoxBaseURL.Name = "textBoxBaseURL";
-            this.textBoxBaseURL.Size = new System.Drawing.Size(303, 23);
-            this.textBoxBaseURL.TabIndex = 10;
-            // 
             // labelUpcomingAppointment
             // 
             this.labelUpcomingAppointment.AutoSize = true;
             this.labelUpcomingAppointment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.labelUpcomingAppointment.Location = new System.Drawing.Point(28, 130);
+            this.labelUpcomingAppointment.Location = new System.Drawing.Point(30, 313);
             this.labelUpcomingAppointment.Name = "labelUpcomingAppointment";
             this.labelUpcomingAppointment.Size = new System.Drawing.Size(245, 15);
             this.labelUpcomingAppointment.TabIndex = 11;
@@ -178,7 +165,7 @@
             // 
             // buttonDismiss
             // 
-            this.buttonDismiss.Location = new System.Drawing.Point(428, 123);
+            this.buttonDismiss.Location = new System.Drawing.Point(893, 306);
             this.buttonDismiss.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonDismiss.Name = "buttonDismiss";
             this.buttonDismiss.Size = new System.Drawing.Size(82, 22);
@@ -190,7 +177,7 @@
             // labelUpcomingAppointmentSummary
             // 
             this.labelUpcomingAppointmentSummary.AutoSize = true;
-            this.labelUpcomingAppointmentSummary.Location = new System.Drawing.Point(28, 179);
+            this.labelUpcomingAppointmentSummary.Location = new System.Drawing.Point(99, 356);
             this.labelUpcomingAppointmentSummary.Name = "labelUpcomingAppointmentSummary";
             this.labelUpcomingAppointmentSummary.Size = new System.Drawing.Size(0, 15);
             this.labelUpcomingAppointmentSummary.TabIndex = 16;
@@ -199,14 +186,14 @@
             // labelUpcomingAppointmentTime
             // 
             this.labelUpcomingAppointmentTime.AutoSize = true;
-            this.labelUpcomingAppointmentTime.Location = new System.Drawing.Point(28, 208);
+            this.labelUpcomingAppointmentTime.Location = new System.Drawing.Point(148, 356);
             this.labelUpcomingAppointmentTime.Name = "labelUpcomingAppointmentTime";
             this.labelUpcomingAppointmentTime.Size = new System.Drawing.Size(0, 15);
             this.labelUpcomingAppointmentTime.TabIndex = 17;
             // 
             // buttonSnooze
             // 
-            this.buttonSnooze.Location = new System.Drawing.Point(323, 124);
+            this.buttonSnooze.Location = new System.Drawing.Point(325, 307);
             this.buttonSnooze.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonSnooze.Name = "buttonSnooze";
             this.buttonSnooze.Size = new System.Drawing.Size(82, 22);
@@ -215,11 +202,58 @@
             this.buttonSnooze.UseVisualStyleBackColor = true;
             this.buttonSnooze.Click += new System.EventHandler(this.buttonSnooze_Click);
             // 
+            // buttonAddIcsUrl
+            // 
+            this.buttonAddIcsUrl.Location = new System.Drawing.Point(892, 69);
+            this.buttonAddIcsUrl.Name = "buttonAddIcsUrl";
+            this.buttonAddIcsUrl.Size = new System.Drawing.Size(75, 23);
+            this.buttonAddIcsUrl.TabIndex = 19;
+            this.buttonAddIcsUrl.Text = "Add";
+            this.buttonAddIcsUrl.UseVisualStyleBackColor = true;
+            this.buttonAddIcsUrl.Click += new System.EventHandler(this.buttonAddIcsUrl_Click);
+            // 
+            // listIcsAddresses
+            // 
+            this.listIcsAddresses.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnBaseAddress,
+            this.columnRelativeAddress});
+            this.listIcsAddresses.GridLines = true;
+            this.listIcsAddresses.Location = new System.Drawing.Point(26, 116);
+            this.listIcsAddresses.Name = "listIcsAddresses";
+            this.listIcsAddresses.Size = new System.Drawing.Size(976, 149);
+            this.listIcsAddresses.TabIndex = 20;
+            this.listIcsAddresses.UseCompatibleStateImageBehavior = false;
+            this.listIcsAddresses.View = System.Windows.Forms.View.Details;
+            this.listIcsAddresses.SelectedIndexChanged += new System.EventHandler(this.listIcsAddresses_SelectedIndexChanged);
+            // 
+            // columnBaseAddress
+            // 
+            this.columnBaseAddress.Text = "baseAddress";
+            this.columnBaseAddress.Width = 300;
+            // 
+            // columnRelativeAddress
+            // 
+            this.columnRelativeAddress.Text = "relativeAddress";
+            this.columnRelativeAddress.Width = 500;
+            // 
+            // buttonRemove
+            // 
+            this.buttonRemove.Location = new System.Drawing.Point(30, 271);
+            this.buttonRemove.Name = "buttonRemove";
+            this.buttonRemove.Size = new System.Drawing.Size(75, 23);
+            this.buttonRemove.TabIndex = 21;
+            this.buttonRemove.Text = "Remove";
+            this.buttonRemove.UseVisualStyleBackColor = true;
+            this.buttonRemove.Click += new System.EventHandler(this.button3_Click);
+            // 
             // FormRememberCalendar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1058, 538);
+            this.ClientSize = new System.Drawing.Size(1126, 682);
+            this.Controls.Add(this.buttonRemove);
+            this.Controls.Add(this.listIcsAddresses);
+            this.Controls.Add(this.buttonAddIcsUrl);
             this.Controls.Add(this.buttonSnooze);
             this.Controls.Add(this.labelUpcomingAppointmentTime);
             this.Controls.Add(this.labelUpcomingAppointmentSummary);
@@ -227,8 +261,6 @@
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.labelUpcomingAppointment);
-            this.Controls.Add(this.textBoxBaseURL);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -257,8 +289,6 @@
         private Label label1;
         private Label label2;
         private Label label3;
-        private Label label4;
-        private TextBox textBoxBaseURL;
         private Label labelUpcomingAppointment;
         private TextBox textBox1;
         private LinkLabel linkLabel1;
@@ -266,5 +296,10 @@
         private Label labelUpcomingAppointmentSummary;
         private Label labelUpcomingAppointmentTime;
         private Button buttonSnooze;
+        private Button buttonAddIcsUrl;
+        private ListView listIcsAddresses;
+        private ColumnHeader columnBaseAddress;
+        private ColumnHeader columnRelativeAddress;
+        private Button buttonRemove;
     }
 }

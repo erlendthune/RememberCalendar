@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Media;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -9,8 +11,10 @@ using System.Net.Http.Json;
 using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Text;
+using System.Text.Json;
 using System.Timers;
 using Ical.Net;
+using RememberCalendar.Properties;
 using RestSharp;
 
 namespace RememberCalendar
@@ -23,7 +27,9 @@ namespace RememberCalendar
         }
         private delegate void SafeCallDelegate(string text);
         List<AppointmentRememberCalendar> appointmentList = new List<AppointmentRememberCalendar>();
+        List<CalendarAddress> icsCalendarAddressList = new List<CalendarAddress>();
         string projectUrl = "https://github.com/erlendthune/RememberCalendar";
+        System.Timers.Timer aTimer = new System.Timers.Timer();
 
         /// <summary>
         /// This method is neccessary to update text from the timer thread. 
@@ -96,8 +102,7 @@ namespace RememberCalendar
         }
 
         public void StartTimer()
-        {
-            System.Timers.Timer aTimer = new System.Timers.Timer();
+        {            
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             aTimer.Interval = 5000;
             aTimer.Enabled = true;
@@ -133,17 +138,33 @@ namespace RememberCalendar
             }
             StartTimer();
         }
+
+        private void debugOutput(string s)
+        {
+            richTextBox1.Text += $"{s}\n";
+        }
         private async Task GetCalenderRest()
         {
             appointmentList.Clear();
 
-            var restClient = new RestClient(textBoxBaseURL.Text);
-            var request = new RestRequest(textboxIcsUrl.Text);
-            
-            var response = await restClient.ExecuteGetAsync(request);
-            if (response.IsSuccessful)
+            foreach(CalendarAddress icsAddress in icsCalendarAddressList)
             {
-                ParseIcsCalendar(response.Content);
+                try
+                {
+                    debugOutput("Contacting " + icsAddress.FullUrl());
+                    var restClient = new RestClient(icsAddress.baseUrl);
+                    var request = new RestRequest(icsAddress.relativeUrl);
+
+                    var response = await restClient.ExecuteGetAsync(request);
+                    if (response.IsSuccessful)
+                    {
+                        ParseIcsCalendar(response.Content);
+                    }
+                }
+                catch (Exception e)
+                {
+                    debugOutput(e.Message);
+                }
             }
         }
  
@@ -153,15 +174,18 @@ namespace RememberCalendar
         }
         private async Task GetCalendarHttpClient()
         {
-            HttpClient client = new HttpClient() {
-                BaseAddress = new Uri(textBoxBaseURL.Text)   //Ensure the URL ends with a slash...
-            };
-            client.DefaultRequestHeaders.Add("User-Agent", "RememberCalendar");
-            var response = await client.GetAsync(textboxIcsUrl.Text);
-            if (response.IsSuccessStatusCode)
-            {
-                string icaltext = await response.Content.ReadAsStringAsync();
-                ParseIcsCalendar(icaltext);
+            foreach (CalendarAddress icsAddress in icsCalendarAddressList) {
+                HttpClient client = new HttpClient()
+                {
+                    BaseAddress = new Uri(icsAddress.baseUrl)   //Ensure the URL ends with a slash...
+                };
+                client.DefaultRequestHeaders.Add("User-Agent", "RememberCalendar");
+                var response = await client.GetAsync(icsAddress.relativeUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string icaltext = await response.Content.ReadAsStringAsync();
+                    ParseIcsCalendar(icaltext);
+                }
             }
         }
 
@@ -172,8 +196,20 @@ namespace RememberCalendar
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            textBoxBaseURL.Text = Properties.Settings.Default.baseURL;
-            textboxIcsUrl.Text = Properties.Settings.Default.icsRelativeURL;
+            try
+            {
+                string fileName = "appsettings.json";
+                string jsonString = File.ReadAllText(fileName);
+                icsCalendarAddressList = JsonSerializer.Deserialize<List<CalendarAddress>>(jsonString);
+                addIcsAddressesToGUI();
+            }
+            catch
+            {
+                Debug.WriteLine("No configuration file found.");
+            }
+
+            int defaultSnoozeTimeInMinutes = Int32.Parse(ConfigurationManager.AppSettings.Get("snoozeTimeoutValueInMinutes"));
+            Debug.WriteLine("Form loaded");
         }
 
         private void label5_Click(object sender, EventArgs e)
@@ -230,8 +266,11 @@ namespace RememberCalendar
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Properties.Settings.Default.icsRelativeURL = textboxIcsUrl.Text;
             Properties.Settings.Default.Save();
+
+            string jsonString = JsonSerializer.Serialize<List<CalendarAddress>>(icsCalendarAddressList);
+            Debug.WriteLine(jsonString);
+            File.WriteAllText("appsettings.json", jsonString);
         }
 
         private void label5_Click_1(object sender, EventArgs e)
@@ -242,13 +281,60 @@ namespace RememberCalendar
         private void buttonDismiss_Click(object sender, EventArgs e)
         {
             Debug.WriteLine("Dismiss button clicked.");
-
+            aTimer.Enabled = false;
         }
 
         private void buttonSnooze_Click(object sender, EventArgs e)
         {
             Debug.WriteLine("Snooze button clicked.");
 
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonAddIcsUrl_Click(object sender, EventArgs e)
+        {
+            
+            var uri = new Uri(textboxIcsUrl.Text);
+            string icsRelativePath = uri.PathAndQuery;
+            string icsBaseUrl = uri.GetLeftPart(System.UriPartial.Authority);
+
+            CalendarAddress calendarAddress = new CalendarAddress(icsBaseUrl, icsRelativePath);
+            icsCalendarAddressList.Add(calendarAddress);
+            textboxIcsUrl.Clear();
+            addCalendarAddressToGui(calendarAddress);
+        }
+        private void addCalendarAddressToGui(CalendarAddress calendarAddress)
+        {
+            ListViewItem item = new ListViewItem(calendarAddress.baseUrl);
+            item.SubItems.Add(calendarAddress.relativeUrl);
+            listIcsAddresses.Items.Add(item);
+        }
+        private void addIcsAddressesToGUI()
+        {
+            foreach(CalendarAddress calendarAddress in icsCalendarAddressList)
+            {
+                addCalendarAddressToGui(calendarAddress);            
+            }
+        }
+        private void listIcsAddresses_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if(listIcsAddresses.Items.Count > 0)
+            {
+                ListViewItem item = listIcsAddresses.SelectedItems[0];
+
+                icsCalendarAddressList.Remove(icsCalendarAddressList[item.Index]);
+                listIcsAddresses.Items.Remove(item);
+
+            }
         }
     }
 }
