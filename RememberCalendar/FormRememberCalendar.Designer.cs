@@ -47,7 +47,9 @@
             this.columnBaseAddress = new System.Windows.Forms.ColumnHeader();
             this.columnRelativeAddress = new System.Windows.Forms.ColumnHeader();
             this.buttonRemove = new System.Windows.Forms.Button();
-            this.upcomingAppointmentTextBox = new System.Windows.Forms.RichTextBox();
+            this.listUpcomingAppointments = new System.Windows.Forms.ListView();
+            this.Time = new System.Windows.Forms.ColumnHeader();
+            this.Description = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
             // 
             // button1
@@ -238,20 +240,36 @@
             this.buttonRemove.UseVisualStyleBackColor = true;
             this.buttonRemove.Click += new System.EventHandler(this.button3_Click);
             // 
-            // upcomingAppointmentTextBox
+            // listUpcomingAppointments
             // 
-            this.upcomingAppointmentTextBox.Location = new System.Drawing.Point(23, 404);
-            this.upcomingAppointmentTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.upcomingAppointmentTextBox.Name = "upcomingAppointmentTextBox";
-            this.upcomingAppointmentTextBox.Size = new System.Drawing.Size(986, 126);
-            this.upcomingAppointmentTextBox.TabIndex = 3;
-            this.upcomingAppointmentTextBox.Text = "";
+            this.listUpcomingAppointments.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.Time,
+            this.Description});
+            this.listUpcomingAppointments.FullRowSelect = true;
+            this.listUpcomingAppointments.GridLines = true;
+            this.listUpcomingAppointments.Location = new System.Drawing.Point(23, 402);
+            this.listUpcomingAppointments.Name = "listUpcomingAppointments";
+            this.listUpcomingAppointments.Size = new System.Drawing.Size(972, 141);
+            this.listUpcomingAppointments.TabIndex = 22;
+            this.listUpcomingAppointments.UseCompatibleStateImageBehavior = false;
+            this.listUpcomingAppointments.View = System.Windows.Forms.View.Details;
+            // 
+            // Time
+            // 
+            this.Time.Text = "Time";
+            this.Time.Width = 300;
+            // 
+            // Description
+            // 
+            this.Description.Text = "Description";
+            this.Description.Width = 500;
             // 
             // FormRememberCalendar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1126, 682);
+            this.Controls.Add(this.listUpcomingAppointments);
             this.Controls.Add(this.buttonRemove);
             this.Controls.Add(this.listIcsAddresses);
             this.Controls.Add(this.buttonAddIcsUrl);
@@ -267,7 +285,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textboxIcsUrl);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.upcomingAppointmentTextBox);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.button1);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -301,6 +318,8 @@
         private ColumnHeader columnBaseAddress;
         private ColumnHeader columnRelativeAddress;
         private Button buttonRemove;
-        private RichTextBox upcomingAppointmentTextBox;
+        private ListView listUpcomingAppointments;
+        private ColumnHeader Time;
+        private ColumnHeader Description;
     }
 }

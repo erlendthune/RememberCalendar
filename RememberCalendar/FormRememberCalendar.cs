@@ -146,12 +146,15 @@ namespace RememberCalendar
                     }
                 }
             }
-            upcomingAppointmentTextBox.Text = "";
+            listUpcomingAppointments.Items.Clear();
+
             appointmentList.Sort((a, b) => a.When.Ticks.CompareTo(b.When.Ticks));
             foreach (var appointment in appointmentList)
             {
                 var when = new DateTime(appointment.When.Ticks);
-                upcomingAppointmentTextBox.Text += $"{appointment.When} {appointment.Summary}\n";
+                ListViewItem item = new ListViewItem(appointment.When.ToString());
+                item.SubItems.Add(appointment.Summary);
+                listUpcomingAppointments.Items.Add(item);
             }
             StartTimer();
         }
