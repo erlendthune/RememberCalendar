@@ -192,8 +192,18 @@ namespace RememberCalendar
         {
             await this.GetCalenderRest();
         }
+        /// <summary>
+        /// Uses Microsofts system Http Client.
+        /// I did not get it to work first, and tried RestSharp instead which worked.
+        /// Then I figured out that User-Agent was not set by default in 
+        /// HttpClient. Once that header was set it worked fine. I left
+        /// both in case someone else encounters the same problem. Then
+        /// they can have a look on how I made it work.
+        /// </summary>
+        /// <returns></returns>
         private async Task GetCalendarHttpClient()
         {
+            appointmentList.Clear();
             foreach (CalendarAddress icsAddress in icsCalendarAddressList) {
                 HttpClient client = new HttpClient()
                 {

@@ -28,25 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelAlert = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // label1
+            // labelAlert
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(595, 166);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(38, 15);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.labelAlert.AutoSize = true;
+            this.labelAlert.Location = new System.Drawing.Point(100, 69);
+            this.labelAlert.Name = "labelAlert";
+            this.labelAlert.Size = new System.Drawing.Size(50, 20);
+            this.labelAlert.TabIndex = 0;
+            this.labelAlert.Text = "label1";
+            this.labelAlert.Click += new System.EventHandler(this.label1_Click);
             // 
             // AlertForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(914, 600);
+            this.Controls.Add(this.labelAlert);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "AlertForm";
             this.Text = "AlertForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AlertForm_FormClosed);
@@ -58,6 +59,6 @@
 
         #endregion
 
-        private Label label1;
+        private Label labelAlert;
     }
 }
